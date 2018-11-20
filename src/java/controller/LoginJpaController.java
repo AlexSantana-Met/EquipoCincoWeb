@@ -31,7 +31,7 @@ public class LoginJpaController implements Serializable {
 
     public LoginJpaController(UserTransaction utx, EntityManagerFactory emf) {
         this.utx = utx;
-        this.emf = Persistence.createEntityManagerFactory("OpticaAndes-PrograWebPU2");
+        this.emf = Persistence.createEntityManagerFactory("OpticaAndes-Persist");
     }
     private UserTransaction utx = null;
     private EntityManagerFactory emf = null;

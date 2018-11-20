@@ -6,6 +6,7 @@
 package ManagedBean;
 
 import ManagedBean.exceptions.RollbackFailureException;
+import controller.LoginFacade;
 import controller.LoginJpaController;
 import entity.Login;
 import javax.enterprise.context.RequestScoped;
@@ -53,22 +54,27 @@ public class LoginBean {
     }
 
     public Login registroLogin() {
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("OpticaAndes-PrograWebPU2");
-        UserTransaction utx = null;
-
-        LoginJpaController loginJPA = new LoginJpaController(utx, emf);
-
-        Login login = new Login(correo, passw);
-        try {
-            loginJPA.create(login);
-            return login;            
-        } catch (RollbackFailureException ex) {
-            System.out.println("Error en rollback");
-            return null;
-        } catch (Exception ex) {
-            System.out.println("Error en inserción");
-            return null;
-        }
+        //funciona
+//        EntityManagerFactory emf = Persistence.createEntityManagerFactory("OpticaAndes-Persist");
+//        UserTransaction utx = null;
+//
+//        LoginJpaController loginJPA = new LoginJpaController(utx, emf);
+//
+//        Login login = new Login(correo, passw);
+//        try {
+//            loginJPA.create(login);
+//            return login;            
+//        } catch (RollbackFailureException ex) {
+//            System.out.println("Error en rollback, login");
+//            return null;
+//        } catch (Exception ex) {
+//            System.out.println("Error en inserción, login");
+//            return null;
+//        }
+        LoginFacade lf = new LoginFacade();
+        Login l = lf.nuevoLogin(correo, passw);
+        return l;
+            
 //        LoginFacade lf = new LoginFacade();
 //        Login l = lf.nuevoLogin(correo, passw);
 //        if (l != null) {

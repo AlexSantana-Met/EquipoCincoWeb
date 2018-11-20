@@ -5,19 +5,10 @@
  */
 package controller;
 
-import entity.Empleados;
-import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-
 /**
  *
  * @author Alejandro
  */
-@Stateless
 public class EmpleadosFacade {
 
-    @PersistenceContext(unitName = "OpticaAndes-PrograWebPU")
-    private EntityManager em;
-    
 }

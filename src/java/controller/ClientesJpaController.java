@@ -34,7 +34,8 @@ public class ClientesJpaController implements Serializable {
 
     public ClientesJpaController(UserTransaction utx, EntityManagerFactory emf) {
         this.utx = utx;
-        this.emf = Persistence.createEntityManagerFactory("OpticaAndes-PrograWebPU2");
+        this.emf = Persistence.createEntityManagerFactory("OpticaAndes-Persist");
+//        this.emf = Persistence.createEntityManagerFactory("OpticaAndes-PrograWebPU");
     }
     private UserTransaction utx = null;
     private EntityManagerFactory emf = null;
@@ -321,9 +322,13 @@ public class ClientesJpaController implements Serializable {
         List<Clientes> lista = new ArrayList<>();
         TypedQuery<Clientes> query = em.createQuery("SELECT c FROM Clientes c", Clientes.class);
         lista = query.getResultList();
-        res = lista.get(lista.size() - 1).getIdCliente();
-        return res;
+        if (lista.isEmpty()) {
+            return -1;
+        } else {
+            res = lista.get(lista.size() - 1).getIdCliente();
+            return res;
 //            res = (res < clientes.getIdCliente()) ? clientes.getIdCliente() : res;
+        }
     }
 
 }

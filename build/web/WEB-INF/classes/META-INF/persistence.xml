@@ -8,8 +8,9 @@
   <persistence-unit name="OpticaAndes-PrograWebPU2" transaction-type="JTA">
     <jta-data-source>java:app/DB_OPTICA_ANDES</jta-data-source>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
-    <properties>
-      <property name="javax.persistence.schema-generation.database.action" value="create"/>
-    </properties>
+  </persistence-unit>
+  <persistence-unit name="OpticaAndes-Persist" transaction-type="JTA">
+    <jta-data-source>java:app/DB_OPTICA_ANDES</jta-data-source>
+    <exclude-unlisted-classes>false</exclude-unlisted-classes>
   </persistence-unit>
 </persistence>
