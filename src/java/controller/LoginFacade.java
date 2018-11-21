@@ -18,7 +18,7 @@ import javax.transaction.UserTransaction;
  * @author Alejandro
  */
 public class LoginFacade {
-    
+
     EntityManagerFactory emf = Persistence.createEntityManagerFactory("OpticaAndes-Persist");
     UserTransaction utx = null;
     LoginJpaController loginJPA = new LoginJpaController(utx, emf);
@@ -37,4 +37,7 @@ public class LoginFacade {
         }
     }
 
+    public boolean iniciarSesion(String correo, String pass) {
+        return loginJPA.validaLogin(new Login(correo, pass));
+    }
 }

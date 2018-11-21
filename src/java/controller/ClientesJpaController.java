@@ -336,4 +336,20 @@ public class ClientesJpaController implements Serializable {
         }
     }
 
+    public Clientes findClienteByCorreo(String correo) {
+        EntityManager em = getEntityManager();
+        List<Clientes> lista = new ArrayList<>();
+        TypedQuery<Clientes> query = em.createQuery("SELECT c FROM Clientes c WHERE c.loginCorreo.correo = '" + correo + "'", Clientes.class);
+        lista = query.getResultList();
+        if (lista.isEmpty()) {
+            return null;
+        } else {
+            if (lista.get(0).getLoginCorreo().getCorreo().equals(correo)) {
+                return lista.get(0);
+            } else {
+                return null;
+            }
+        }
+    }
+
 }

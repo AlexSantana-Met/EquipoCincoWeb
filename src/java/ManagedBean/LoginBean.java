@@ -5,15 +5,15 @@
  */
 package ManagedBean;
 
-import ManagedBean.exceptions.RollbackFailureException;
+import controller.ClientesFacade;
 import controller.LoginFacade;
-import controller.LoginJpaController;
 import entity.Login;
 import javax.enterprise.context.RequestScoped;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
 import javax.inject.Named;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import javax.transaction.UserTransaction;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -74,7 +74,7 @@ public class LoginBean {
         LoginFacade lf = new LoginFacade();
         Login l = lf.nuevoLogin(correo, passw);
         return l;
-            
+
 //        LoginFacade lf = new LoginFacade();
 //        Login l = lf.nuevoLogin(correo, passw);
 //        if (l != null) {
@@ -86,6 +86,50 @@ public class LoginBean {
 //            fc.addMessage("", new FacesMessage("Error en registro!"));
 //            return null;
 //        }
+    }
+
+    public void iniciarSesion() {
+        LoginFacade lf = new LoginFacade();
+        ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+        FacesContext fc = FacesContext.getCurrentInstance();
+        if (lf.iniciarSesion(correo, passw)) {
+            HttpSession session = (HttpSession) ec.getSession(false);
+            session.setAttribute("user", this.getCorreo());
+            session.setAttribute("pass", this.getPassw());
+            ClienteBean cliente = new ClientesFacade().getCliente(correo);
+            session.setAttribute("cliente", cliente);
+//            if (cliente != null) {
+//                fc.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Inicio de sesión correcto", null));
+//                return "perfil.xhtml";
+//            } else {
+//                fc.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error en inicio de sesión.", null));
+//                return null;
+//            }
+            String result = cliente.muestraPerfil();
+            switch (result) {
+                case "ERROR":
+                    fc.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error en inicio de sesión.", null));
+                    break;
+                case "EXITO":
+                    fc.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Inicio de sesión correcto", null));
+                    break;
+            }
+//            try {
+//                Client
+////                ec.redirect(ec.getRequestContextPath() + "/faces/perfil.xhtml");
+//            } catch (IOException ex) {
+//                fc.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error en inicio de sesión.", null));
+//            }
+        } else {
+            fc.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Contraseña o correo incorrectos.", null));
+        }
+    }
+
+    public void limpiar() {
+        this.correo = "";
+        this.passw = "";
+        FacesContext fc = FacesContext.getCurrentInstance();
+        fc.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "", null));
     }
 
 }

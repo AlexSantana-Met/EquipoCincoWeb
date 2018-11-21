@@ -21,6 +21,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.persistence.TypedQuery;
 import javax.transaction.UserTransaction;
 
 /**
@@ -230,5 +231,18 @@ public class LoginJpaController implements Serializable {
             em.close();
         }
     }
-    
+
+    public boolean validaLogin(Login login) {
+        EntityManager em = getEntityManager();
+        List<Login> lis = new ArrayList<>();
+        TypedQuery<Login> query = em.createQuery("SELECT l FROM Login l where l.correo = '" + login.getCorreo() + "'", Login.class);
+        lis = query.getResultList();
+        if (!lis.isEmpty()) {
+            Login aux = lis.get(0);
+            return aux.getPassw().equals(login.getPassw());
+        } else {
+            return false;
+        }
+    }
+
 }

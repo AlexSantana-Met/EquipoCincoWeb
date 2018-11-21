@@ -6,12 +6,18 @@
 package ManagedBean;
 
 import controller.ClientesFacade;
+import entity.Clientes;
+import java.io.IOException;
 import javax.inject.Named;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -19,6 +25,7 @@ import javax.faces.context.FacesContext;
  */
 @Named(value = "clienteBean")
 @RequestScoped
+//@SessionScoped
 public class ClienteBean implements Serializable {
 
     private int idCliente;
@@ -35,6 +42,18 @@ public class ClienteBean implements Serializable {
      * Creates a new instance of OrdenBean
      */
     public ClienteBean() {
+        HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
+        ClienteBean cl = (ClienteBean) session.getAttribute("cliente");
+        if (cl != null) {
+            this.nombre = cl.getNombre();
+            this.apPaterno = cl.getApPaterno();
+            this.apMaterno = cl.getApMaterno();
+            this.ciudad = cl.getCiudad();
+            this.direccion = cl.getDireccion();
+            this.fechaNac = cl.getFechaNac();
+        } else {
+
+        }
     }
 
     public int getIdCliente() {
@@ -109,6 +128,15 @@ public class ClienteBean implements Serializable {
         this.auxP = auxP;
     }
 
+    public ClienteBean(String nombre, String apPaterno, String apMaterno, Date fechaNac, String direccion, String ciudad) {
+        this.nombre = nombre;
+        this.apPaterno = apPaterno;
+        this.apMaterno = apMaterno;
+        this.fechaNac = fechaNac;
+        this.direccion = direccion;
+        this.ciudad = ciudad;
+    }
+
     public void limpiar() {
         FacesContext fc = FacesContext.getCurrentInstance();
         this.apMaterno = "";
@@ -174,6 +202,33 @@ public class ClienteBean implements Serializable {
 //                fc.addMessage("", new FacesMessage(FacesMessage.SEVERITY_ERROR, "El correo que usted ingresó ya ha sido registrado anteriormente.", null));
 //                return null;
 //            }
+        }
+    }
+
+    public String muestraPerfil() {
+        ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+        try {
+            HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
+            ClienteBean cl = (ClienteBean) session.getAttribute("cliente");
+
+            ec.redirect(ec.getRequestContextPath() + "/faces/perfil.xhtml");
+            return "EXITO";
+        } catch (IOException ex) {
+            return "ERROR";
+        }
+    }
+
+    public void cerrarSesion() {
+        HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
+        
+        session.setAttribute("cliente", null);
+        session.setAttribute("pass", null);
+        session.setAttribute("correo", null);
+        ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+        try {
+            ec.redirect(ec.getRequestContextPath() + "/faces/index.xhtml");
+        } catch (IOException ex) {
+            
         }
     }
 }

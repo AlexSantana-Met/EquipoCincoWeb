@@ -33,10 +33,11 @@
                             </h2>
                             <h:outputLabel>
                                 <h:inputText id="userL" 
-                                             label="Usuario" 
+                                             label="Correo" 
                                              validatorMessage="Usuario requerido" 
                                              class='inp' 
-                                             p:placeholder="Usuario"
+                                             p:placeholder="Correo"
+                                             value="#{loginBean.correo}"
                                              />
                             </h:outputLabel>
                             <h:outputLabel>
@@ -45,17 +46,18 @@
                                                validatorMessage="Contraseña requerido" 
                                                class='inp'
                                                p:placeholder="Contraseña"
+                                               value="#{loginBean.passw}"
                                                />
                             </h:outputLabel>
                             <h:panelGroup >
                                 <h:commandButton id="enviar" 
-                                                 action="perfil.xhtml" 
+                                                 action="#{loginBean.iniciarSesion()}" 
                                                  value="Ingresar" 
                                                  class="btnL" 
 
                                                  ></h:commandButton>
                                 <h:commandButton id="limpiar" 
-                                                 action="index.xhtml" 
+                                                 action="#{loginBean.limpiar()}" 
                                                  type="reset" value="Limpiar" 
                                                  class='btnL' 
                                                  ></h:commandButton>
@@ -63,6 +65,7 @@
                             <br/>
                         </h:panelGrid>
                     </h:form>
+                    <h:messages infoClass="info" errorClass="error" warnClass="warning" fatalClass="normalM" id="mj"/>
                     <br/>
                     <br/>
                 </div>
