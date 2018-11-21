@@ -432,7 +432,7 @@ textarea{
 .error {
     border: none;
     border-radius: 3px;
-    background: rgb(242,222,222);
+    background: rgba(242,222,222, .8);
     color: rgb(169,68,68);
     height: 20px;
     width: 50%;
@@ -441,8 +441,17 @@ textarea{
 .info {
     border: none;
     border-radius: 3px;
-    background: rgb(223,240,216);
+    background: rgba(223,240,216, .8);
     color: rgb(60,118,60);
+    height: 20px;
+    width: 50%;
+}
+
+.warning {
+    border: none;
+    border-radius: 3px;
+    background: rgba(252,248,227, .8);
+    color: rgb(138,109,60);
     height: 20px;
     width: 50%;
 }

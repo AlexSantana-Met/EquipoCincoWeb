@@ -62,6 +62,13 @@ public class Contacto implements Serializable {
         this.mensaje = mensaje;
     }
 
+    public Contacto(Integer idContacto, String correo, String nombre, String mensaje) {
+        this.idContacto = idContacto;
+        this.correo = correo;
+        this.nombre = nombre;
+        this.mensaje = mensaje;
+    }
+    
     public Integer getIdContacto() {
         return idContacto;
     }

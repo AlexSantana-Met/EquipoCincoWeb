@@ -8,13 +8,17 @@ package controller;
 import ManagedBean.exceptions.NonexistentEntityException;
 import ManagedBean.exceptions.PreexistingEntityException;
 import ManagedBean.exceptions.RollbackFailureException;
+import entity.Clientes;
 import entity.Contacto;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.Persistence;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import javax.transaction.UserTransaction;
@@ -27,7 +31,7 @@ public class ContactoJpaController implements Serializable {
 
     public ContactoJpaController(UserTransaction utx, EntityManagerFactory emf) {
         this.utx = utx;
-        this.emf = emf;
+        this.emf = Persistence.createEntityManagerFactory("OpticaAndes-Persist");
     }
     private UserTransaction utx = null;
     private EntityManagerFactory emf = null;
@@ -37,15 +41,18 @@ public class ContactoJpaController implements Serializable {
     }
 
     public void create(Contacto contacto) throws PreexistingEntityException, RollbackFailureException, Exception {
-        EntityManager em = null;
+        EntityManager em = getEntityManager();
         try {
-            utx.begin();
-            em = getEntityManager();
+//            utx.begin();
+            em.getTransaction().begin();
+//            em = getEntityManager();
             em.persist(contacto);
-            utx.commit();
+//            utx.commit();
+            em.getTransaction().commit();
         } catch (Exception ex) {
             try {
-                utx.rollback();
+//                utx.rollback();
+                em.getTransaction().rollback();
             } catch (Exception re) {
                 throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
             }
@@ -61,15 +68,18 @@ public class ContactoJpaController implements Serializable {
     }
 
     public void edit(Contacto contacto) throws NonexistentEntityException, RollbackFailureException, Exception {
-        EntityManager em = null;
+        EntityManager em = getEntityManager();
         try {
-            utx.begin();
-            em = getEntityManager();
+//            utx.begin();
+//            em = getEntityManager();
+            em.getTransaction().begin();
             contacto = em.merge(contacto);
-            utx.commit();
+//            utx.commit();
+            em.getTransaction().commit();
         } catch (Exception ex) {
             try {
-                utx.rollback();
+//                utx.rollback();
+                em.getTransaction().rollback();
             } catch (Exception re) {
                 throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
             }
@@ -89,10 +99,11 @@ public class ContactoJpaController implements Serializable {
     }
 
     public void destroy(Integer id) throws NonexistentEntityException, RollbackFailureException, Exception {
-        EntityManager em = null;
+        EntityManager em = getEntityManager();
         try {
-            utx.begin();
-            em = getEntityManager();
+//            utx.begin();
+//            em = getEntityManager();
+            em.getTransaction().begin();
             Contacto contacto;
             try {
                 contacto = em.getReference(Contacto.class, id);
@@ -101,10 +112,12 @@ public class ContactoJpaController implements Serializable {
                 throw new NonexistentEntityException("The contacto with id " + id + " no longer exists.", enfe);
             }
             em.remove(contacto);
-            utx.commit();
+//            utx.commit();
+            em.getTransaction().commit();
         } catch (Exception ex) {
             try {
-                utx.rollback();
+//                utx.rollback();
+                em.getTransaction().rollback();
             } catch (Exception re) {
                 throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
             }
@@ -159,6 +172,20 @@ public class ContactoJpaController implements Serializable {
             return ((Long) q.getSingleResult()).intValue();
         } finally {
             em.close();
+        }
+    }
+
+    public int getMaxId() {
+        int res = -1;
+        EntityManager em = getEntityManager();
+        List<Contacto> lista = new ArrayList<>();
+        TypedQuery<Contacto> query = em.createQuery("SELECT c FROM Contacto c", Contacto.class);
+        lista = query.getResultList();
+        if (lista.isEmpty()) {
+            return -1;
+        } else {
+            res = lista.get(lista.size() - 1).getIdContacto();
+            return res;
         }
     }
     

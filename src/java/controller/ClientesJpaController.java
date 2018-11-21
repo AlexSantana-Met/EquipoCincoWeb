@@ -117,10 +117,11 @@ public class ClientesJpaController implements Serializable {
     }
 
     public void edit(Clientes clientes) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
-        EntityManager em = null;
+        EntityManager em = getEntityManager();
         try {
-            utx.begin();
-            em = getEntityManager();
+//            utx.begin();
+//            em = getEntityManager();
+            em.getTransaction().begin();
             Clientes persistentClientes = em.find(Clientes.class, clientes.getIdCliente());
             Login loginCorreoOld = persistentClientes.getLoginCorreo();
             Login loginCorreoNew = clientes.getLoginCorreo();
@@ -197,10 +198,12 @@ public class ClientesJpaController implements Serializable {
                     }
                 }
             }
-            utx.commit();
+//            utx.commit();
+            em.getTransaction().commit();
         } catch (Exception ex) {
             try {
-                utx.rollback();
+//                utx.rollback();
+                em.getTransaction().rollback();
             } catch (Exception re) {
                 throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
             }
@@ -220,10 +223,11 @@ public class ClientesJpaController implements Serializable {
     }
 
     public void destroy(Integer id) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
-        EntityManager em = null;
+        EntityManager em = getEntityManager();
         try {
-            utx.begin();
-            em = getEntityManager();
+//            utx.begin();
+            em.getTransaction().begin();
+//            em = getEntityManager();
             Clientes clientes;
             try {
                 clientes = em.getReference(Clientes.class, id);
@@ -255,10 +259,12 @@ public class ClientesJpaController implements Serializable {
                 loginCorreo = em.merge(loginCorreo);
             }
             em.remove(clientes);
-            utx.commit();
+//            utx.commit();
+            em.getTransaction().commit();
         } catch (Exception ex) {
             try {
-                utx.rollback();
+//                utx.rollback();
+                em.getTransaction().rollback();
             } catch (Exception re) {
                 throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
             }
@@ -327,7 +333,6 @@ public class ClientesJpaController implements Serializable {
         } else {
             res = lista.get(lista.size() - 1).getIdCliente();
             return res;
-//            res = (res < clientes.getIdCliente()) ? clientes.getIdCliente() : res;
         }
     }
 

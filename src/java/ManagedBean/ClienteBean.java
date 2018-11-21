@@ -5,9 +5,7 @@
  */
 package ManagedBean;
 
-import ManagedBean.exceptions.RollbackFailureException;
 import controller.ClientesFacade;
-import entity.Clientes;
 import javax.inject.Named;
 import java.io.Serializable;
 import java.util.Date;
@@ -142,10 +140,10 @@ public class ClienteBean implements Serializable {
 
             switch (result) {
                 case "EXITO":
+                    limpiar();
                     fc.addMessage("", new FacesMessage(FacesMessage.SEVERITY_INFO, "Se ha registrado exitosamente.", null));
                     break;
                 case "ERROR":
-                    limpiar();
                     fc.addMessage("", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ha ocurrido un error en su registro.", null));
                     break;
                 case "CORREO":

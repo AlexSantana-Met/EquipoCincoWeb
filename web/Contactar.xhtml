@@ -30,26 +30,25 @@
                         <div class="formContacto">
                             <h:panelGrid columns="1" cellpadding="1" cellspacing="1" width="100%">
                                 <!--<label for="nom">Nombre completo:</label>-->
-                                <strong>Nombre: </strong>
+                                <strong>Nombre</strong>
                                 <h:outputLabel>
-                                    <h:inputText class="mensaje" id="nom" ></h:inputText>
+                                    <h:inputText value="#{contactoBean.nombre}" class="mensaje" id="nom" ></h:inputText>
                                 </h:outputLabel>
                                 <!--<label for="email">Email:</label>-->
-                                <strong>Correo: </strong>
+                                <strong>Correo</strong>
                                 <h:outputLabel>
-
-                                    <h:inputText class="mensaje" id="email" ></h:inputText>
+                                    <h:inputText value="#{contactoBean.correo}" class="mensaje" id="email" ></h:inputText>
                                 </h:outputLabel>
                                 <!--<label for="men">Mensaje:</label>-->
-                                <strong>Mensaje: </strong>
+                                <strong>Mensaje</strong>
                                 <h:outputLabel>
-
-                                    <h:inputTextarea class="mensaje" id="men" style="height: 100px; resize: none;"></h:inputTextarea>
+                                    <h:inputTextarea class="mensaje" id="men" style="height: 120px; resize: none; font-family: 'Arial'; font-size: 12px;" value="#{contactoBean.mensaje}"></h:inputTextarea>
                                 </h:outputLabel>
                             </h:panelGrid>
-                            <h:commandButton class="enviar" value="Enviar"></h:commandButton>
+                            <h:commandButton class="enviar" value="Enviar" action="#{contactoBean.registrarContacto()}"></h:commandButton>
                         </div>
                     </h:form>
+                    <h:messages infoClass="info" errorClass="error" warnClass="warning" fatalClass="normalM" id="mj"/>
                 </div>
             </ui:define>
         </ui:composition>
