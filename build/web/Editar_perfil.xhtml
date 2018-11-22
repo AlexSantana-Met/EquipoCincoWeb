@@ -17,7 +17,7 @@
                                 <h:commandButton id="ing" value="ORDENES" class="bton" action="Login.xhtml"></h:commandButton>
                                 <h:commandButton id="reg" value="CONSULTAS" class="bton" action="Consultas.xhtml"></h:commandButton>
                                 <h:commandButton id="prod" value="PERFIL" class="bton btnHover" ></h:commandButton>
-                                <h:commandButton value="Cerrar Sesión" action="index.xhtml" class="btnLog" id="logout"/>
+                                <h:commandButton value="Cerrar Sesión" action="#{clienteBean.cerrarSesion()}" class="btnLog" id="logout"/>
                             </h:form>
                         </h:panelGroup>
                     </h:panelGrid>

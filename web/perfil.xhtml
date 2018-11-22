@@ -15,8 +15,8 @@
                         <h:panelGroup>
                             <h:form>
                                 <h:commandButton id="home" value="AGENDAR CITA" class="bton " action="Fecha.xhtml"></h:commandButton>
-                                <h:commandButton id="ing" value="ORDENES" class="bton" action="ConsultaOrdenes.xhtml"></h:commandButton>
-                                <h:commandButton id="reg" value="CONSULTAS" class="bton" action="Consultas.xhtml"></h:commandButton>
+                                <h:commandButton id="ing" value="ORDENES" class="bton" action="#{ordenBean.mostrarOrdenes()}"></h:commandButton>
+                                <h:commandButton id="reg" value="CONSULTAS" class="bton" action="#{citaBean.mostrarCitas()}"></h:commandButton>
                                 <h:commandButton id="prod" value="PERFIL" class="bton btnHover" ></h:commandButton>
                                 <h:commandButton value="Cerrar Sesión" action="#{clienteBean.cerrarSesion()}" class="btnLog" id="logout"/>
                             </h:form>

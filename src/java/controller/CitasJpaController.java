@@ -16,9 +16,13 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import entity.Clientes;
 import entity.Empleados;
+import entity.Ordenes;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import javax.persistence.TypedQuery;
 import javax.transaction.UserTransaction;
 
 /**
@@ -29,7 +33,7 @@ public class CitasJpaController implements Serializable {
 
     public CitasJpaController(UserTransaction utx, EntityManagerFactory emf) {
         this.utx = utx;
-        this.emf = emf;
+        this.emf = Persistence.createEntityManagerFactory("OpticaAndes-Persist");
     }
     private UserTransaction utx = null;
     private EntityManagerFactory emf = null;
@@ -218,6 +222,18 @@ public class CitasJpaController implements Serializable {
             return ((Long) q.getSingleResult()).intValue();
         } finally {
             em.close();
+        }
+    }
+    
+    public List<Citas> findByIdCliente(int idCliente) {
+        EntityManager em = getEntityManager();
+        List<Citas> lista = new ArrayList<>();
+        TypedQuery<Citas> query = em.createQuery("SELECT c FROM Citas c WHERE c.clientesId.idCliente = " + idCliente, Citas.class);
+        lista = query.getResultList();
+        if (lista.isEmpty()) {
+            return null;
+        } else {
+            return lista;
         }
     }
     

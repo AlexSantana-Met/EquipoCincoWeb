@@ -13,22 +13,22 @@
                 <h:form>
                     <div id="menu" align="center">
                         <h:panelGrid columns="2" cellpadding="1" cellspacing="1" class="panelSup" width="100%">
-                        <h:panelGroup>
-                            <h:form>
-                                <h:commandButton id="age" value="AGENDAR CITA" class="bton btnHover" action="Fecha.xhtml"></h:commandButton>
-                                <h:commandButton id="ing" value="ORDENES" class="bton btnHover" ></h:commandButton>
-                                <h:commandButton id="reg" value="CONSULTAS" class="bton" action="Consultas.xhtml"></h:commandButton>
-                                <h:commandButton id="prod" value="PERFIL" class="bton" action="perfil.xhtml"></h:commandButton>
-                                <h:commandButton value="Cerrar Sesión" action="index.xhtml" class="btnLog" id="logout"/>
-                            </h:form>
-                        </h:panelGroup>
-                    </h:panelGrid>
+                            <h:panelGroup>
+                                <h:form>
+                                    <h:commandButton id="age" value="AGENDAR CITA" class="bton" action="Fecha.xhtml"></h:commandButton>
+                                    <h:commandButton id="ing" value="ORDENES" class="bton btnHover" action="#{ordenBean.mostrarOrdenes()}"></h:commandButton>
+                                    <h:commandButton id="reg" value="CONSULTAS" class="bton" action="#{citaBean.mostrarCitas()}"></h:commandButton>
+                                    <h:commandButton id="prod" value="PERFIL" class="bton" action="perfil.xhtml"></h:commandButton>
+                                    <h:commandButton value="Cerrar Sesión" action="#{clienteBean.cerrarSesion()}" class="btnLog" id="logout"/>
+                                </h:form>
+                            </h:panelGroup>
+                        </h:panelGrid>
                     </div>
                 </h:form>
                 <div align="center">
                     <br/>
 
-                    <h:dataTable id="tablaCon" value="#{cono.con}" var="cons" captionClass="caption">
+                    <h:dataTable id="tablaCon" value="#{ordenBean.listaOrdenes}" var="cons" captionClass="caption">
                         <f:facet name="caption">Registro de ordenes </f:facet>
                         <h:column >
                             <f:facet name="header">Tipo</f:facet>
@@ -47,9 +47,8 @@
                                 #{cons.estado}
                         </h:column>
                     </h:dataTable>
-
-
                     <br/>
+                    <h:messages infoClass="info" errorClass="error" warnClass="warning" fatalClass="normalM" id="mj"/>
                     <br/>
                 </div>
             </ui:define>

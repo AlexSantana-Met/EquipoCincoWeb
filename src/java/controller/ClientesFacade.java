@@ -51,6 +51,6 @@ public class ClientesFacade {
     
     public ClienteBean getCliente(String correo){
         Clientes cl = clientesJPA.findClienteByCorreo(correo);
-        return new ClienteBean(cl.getNombre(), cl.getApPaterno(), cl.getApMaterno(), cl.getFechaNac(), cl.getDireccion(), cl.getCiudad());
+        return new ClienteBean(cl.getIdCliente(), cl.getNombre(), cl.getApPaterno(), cl.getApMaterno(), cl.getFechaNac(), cl.getDireccion(), cl.getCiudad());
     }
 }

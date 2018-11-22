@@ -16,10 +16,10 @@
                         <h:panelGroup>
                             <h:form>
                                 <h:commandButton id="home" value="AGENDAR CITA" class="bton " action="Fecha.xhtml"></h:commandButton>
-                                <h:commandButton id="ing" value="ORDENES" class="bton" action="ConsultaOrdenes.xhtml"></h:commandButton>
-                                <h:commandButton id="reg" value="CONSULTAS" class="bton btnHover"></h:commandButton>
+                                <h:commandButton id="ing" value="ORDENES" class="bton" action="#{ordenBean.mostrarOrdenes()}"></h:commandButton>
+                                <h:commandButton id="reg" value="CONSULTAS" class="bton btnHover" action="#{citaBean.mostrarCitas()}"></h:commandButton>
                                 <h:commandButton id="prod" value="PERFIL" class="bton" action="perfil.xhtml"></h:commandButton>
-                                <h:commandButton value="Cerrar Sesión" action="index.xhtml" class="btnLog" id="logout"/>
+                                <h:commandButton value="Cerrar Sesión" action="#{clienteBean.cerrarSesion()}" class="btnLog" id="logout"/>
                             </h:form>
                         </h:panelGroup>
                     </h:panelGrid>
@@ -27,11 +27,15 @@
                 <br/>
                 <br/>
                 <div align="center">
-                    <h:dataTable id="tablaCon" value="#{con.con}" var="cons" captionClass="caption">
+                    <h:dataTable id="tablaCon" value="#{citaBean.listaCitas}" var="cons" captionClass="caption">
                         <f:facet name="caption">Registro de consultas</f:facet>
                         <h:column >
                             <f:facet name="header">Fecha</f:facet>
                                 #{cons.fecha}
+                        </h:column> 
+                        <h:column >
+                            <f:facet name="header">Hora</f:facet>
+                                #{cons.hora}
                         </h:column> 
                         <h:column >
                             <f:facet name="header">Descripción</f:facet>
@@ -39,7 +43,7 @@
                         </h:column>
                         <h:column >
                             <f:facet name="header">Estado</f:facet>
-                                #{cons.status}
+                                #{cons.estado}
                         </h:column> 
                         <h:column >
                             <f:facet name="header">Respuesta</f:facet>
@@ -47,6 +51,8 @@
                         </h:column>
                     </h:dataTable>
                     <br/>
+                    <h:messages infoClass="info" errorClass="error" warnClass="warning" fatalClass="normalM" id="mj"/>
+
                     <br/>
                     <!--                    <h:form>
                                             <h:commandButton class="btnAdd agregar" value="Agregar" action="Citas.xhtml" id="new"/>

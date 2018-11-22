@@ -15,9 +15,12 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import entity.Clientes;
 import entity.Ordenes;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import javax.persistence.TypedQuery;
 import javax.transaction.UserTransaction;
 
 /**
@@ -28,7 +31,7 @@ public class OrdenesJpaController implements Serializable {
 
     public OrdenesJpaController(UserTransaction utx, EntityManagerFactory emf) {
         this.utx = utx;
-        this.emf = emf;
+        this.emf = Persistence.createEntityManagerFactory("OpticaAndes-Persist");
     }
     private UserTransaction utx = null;
     private EntityManagerFactory emf = null;
@@ -191,5 +194,17 @@ public class OrdenesJpaController implements Serializable {
             em.close();
         }
     }
-    
+
+    public List<Ordenes> findByIdCliente(int idCliente) {
+        EntityManager em = getEntityManager();
+        List<Ordenes> lista = new ArrayList<>();
+        TypedQuery<Ordenes> query = em.createQuery("SELECT o FROM Ordenes o WHERE o.clientesId.idCliente = " + idCliente, Ordenes.class);
+        lista = query.getResultList();
+        if (lista.isEmpty()) {
+            return null;
+        } else {
+            return lista;
+        }
+    }
+
 }

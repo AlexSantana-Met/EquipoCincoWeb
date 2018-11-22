@@ -5,9 +5,7 @@
  */
 package controller;
 
-import ManagedBean.ClienteBean;
 import ManagedBean.exceptions.RollbackFailureException;
-import entity.Clientes;
 import entity.Login;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;

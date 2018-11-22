@@ -6,13 +6,10 @@
 package ManagedBean;
 
 import controller.ClientesFacade;
-import entity.Clientes;
 import java.io.IOException;
 import javax.inject.Named;
 import java.io.Serializable;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.ExternalContext;
@@ -45,6 +42,7 @@ public class ClienteBean implements Serializable {
         HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
         ClienteBean cl = (ClienteBean) session.getAttribute("cliente");
         if (cl != null) {
+            this.idCliente = cl.getIdCliente();
             this.nombre = cl.getNombre();
             this.apPaterno = cl.getApPaterno();
             this.apMaterno = cl.getApMaterno();
@@ -128,7 +126,8 @@ public class ClienteBean implements Serializable {
         this.auxP = auxP;
     }
 
-    public ClienteBean(String nombre, String apPaterno, String apMaterno, Date fechaNac, String direccion, String ciudad) {
+    public ClienteBean(int id, String nombre, String apPaterno, String apMaterno, Date fechaNac, String direccion, String ciudad) {
+        this.idCliente = id;
         this.nombre = nombre;
         this.apPaterno = apPaterno;
         this.apMaterno = apMaterno;
