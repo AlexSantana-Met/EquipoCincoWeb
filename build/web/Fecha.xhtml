@@ -13,20 +13,6 @@
         <title>Facelet Title</title>
     </h:head>
     <h:body>
-        <p:growl id="msgs" showDetail="true" />
-
-        <h:panelGrid columns="2" cellpadding="5">
-            <p:outputLabel for="inline" value="Seleccione fecha en la que desdea agendar su cita:" />
-            <p:calendar id="inline" value="Fecha" mode="inline" />
-
-
-        </h:panelGrid>
-
-
-    </h:body>
-
-
-    <h:body>
         <ui:composition template="plantillas/main.xhtml">
             <ui:define name="content">
                 <div id="menu" align="center">
@@ -46,46 +32,40 @@
                     <br/>
                     <br/>
                     <h:form>
-                        <h:panelGrid columns="2" cellpadding="1" width="70%">
-                            <p:outputLabel for="inline" value="Seleccione la fecha a asignar su cita:" />
-                            <p:outputLabel for="tablaCli" value="Seleccione la Hora a asignar su cita:" />
-                            <p:calendar id="inline" value="#{calendarView.date1}" mode="inline" />
-
-                            <h:dataTable id="tablaCli" value="#{hora.hora}" var="dato" captionClass="caption" styleClass="tabla">
-
-                                <h:column >
-                                    <f:facet name="header">Fecha   </f:facet>
-                                        #{dato}
-                                </h:column> 
-
-                                <h:column  >
-                                    <f:facet name="header">   Agendar</f:facet>
-                                    <b:button id="see" 
-                                              look="success add"
-                                              icon-awesome="plus"
-                                              value="Apartar">
-                                    </b:button>
-                                </h:column>
-                            </h:dataTable>
+                        <h:panelGrid columns="3" cellpadding="1" cellspacing="20" width="70%">
+                            <p:outputLabel for="popup" value="Seleccione la fecha a asignar su cita:" />
+                            <p:outputLabel for="tablaCli" value="Seleccione la hora a asignar su cita:" />
+                            <p:outputLabel for="desc" value="Descripción: " />
+                            <h:panelGroup>
+                                <p:calendar id="popup" value="#{citaBean.date1}"/>
+                                <h:form>
+                                    <h:commandButton id="enviar" 
+                                                     action="#{citaBean.fechaRes()}"
+                                                     value="Seleccionar Fecha" 
+                                                     class="btnLog2" 
+                                                     >
+                                        <!--<f:ajax render="tablaCli"/>-->
+                                    </h:commandButton>
+                                </h:form>
+                            </h:panelGroup>
+                            <h:selectOneMenu id="tablaCli" value="#{citaBean.hora}">
+                                <f:selectItems value="#{citaBean.horasDispCitas}"/>
+                            </h:selectOneMenu>
+                            <h:outputLabel>
+                                <h:inputTextarea class="mensaje" id="desc" style="height: 120px; resize: none; font-family: 'Arial'; font-size: 12px; width: 250px;" value="#{citaBean.descripcion}"></h:inputTextarea>
+                            </h:outputLabel>
                             <br/>
                             <br/>
-                            <h:form>
-                                <h:commandButton class="add" value="Enviar asignaión" action="Formulario.xhtml"/>
-                            </h:form>
+                            <h:commandButton class="btnLog2" value="Agendar Cita" action="#{citaBean.agendarCita()}"/>
                         </h:panelGrid>
                     </h:form>
-                    <br/>
-                    <br/>
+
+                    <h:messages infoClass="info" errorClass="error" warnClass="warning" fatalClass="normalM" id="mj"/>
+
                 </div>
-
-
-
-
-
             </ui:define>
         </ui:composition>
     </h:body>
-
 
 </html>
 

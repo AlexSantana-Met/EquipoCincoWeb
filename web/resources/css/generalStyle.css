@@ -147,6 +147,26 @@ and open the template in the editor.
     margin: 0px 10px;
 }
 
+.btnLog2 {
+    vertical-align: middle;
+    height: 25px;
+    width: 140px;
+    border: none;
+    outline: none;
+    border-radius: 4px;
+    font-weight: bold;
+    color: rgb(55, 107, 1);
+    position: relative;
+    background: transparent;
+    background: ghostwhite;
+    font-size: 12px;
+    cursor: pointer;
+    border-radius: 3px;
+    float:none;
+    text-align:center;
+    margin: 0px 10px;
+}
+
 .panelLog .inp {
     position: relative;
     width: 100%;

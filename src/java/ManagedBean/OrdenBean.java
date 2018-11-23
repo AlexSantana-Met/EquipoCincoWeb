@@ -107,9 +107,9 @@ public class OrdenBean {
         int idCl = ((ClienteBean)session.getAttribute("cliente")).getIdCliente();
         listaOrdenes = new ArrayList<>();
         listaOrdenes = of.obtenerOrdenes(idCl);
-        if (listaOrdenes.isEmpty()) {
+        if (listaOrdenes == null) {
             fc.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "No existen registros de ordenes realizadas.", null));
-            return null;
+            return "ConsultaOrdenes.xhtml";
         } else {
             fc.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "", null));
             return "ConsultaOrdenes.xhtml";

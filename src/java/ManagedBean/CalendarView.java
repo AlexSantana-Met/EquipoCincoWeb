@@ -19,9 +19,7 @@ public class CalendarView {
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
         facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Date Selected", format.format(event.getObject())));
     }
-     
-   
- 
+
     public Date getDate1() {
         return date1;
     }

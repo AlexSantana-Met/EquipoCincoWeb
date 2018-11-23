@@ -16,8 +16,8 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import entity.Clientes;
 import entity.Empleados;
-import entity.Ordenes;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -43,10 +43,11 @@ public class CitasJpaController implements Serializable {
     }
 
     public void create(Citas citas) throws PreexistingEntityException, RollbackFailureException, Exception {
-        EntityManager em = null;
+        EntityManager em = getEntityManager();
         try {
-            utx.begin();
-            em = getEntityManager();
+//            utx.begin();
+//            em = getEntityManager();
+            em.getTransaction().begin();
             Clientes clientesId = citas.getClientesId();
             if (clientesId != null) {
                 clientesId = em.getReference(clientesId.getClass(), clientesId.getIdCliente());
@@ -66,10 +67,11 @@ public class CitasJpaController implements Serializable {
                 empleadosId.getCitasList().add(citas);
                 empleadosId = em.merge(empleadosId);
             }
-            utx.commit();
+            em.getTransaction().commit();
         } catch (Exception ex) {
             try {
-                utx.rollback();
+//                utx.rollback();
+                em.getTransaction().rollback();
             } catch (Exception re) {
                 throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
             }
@@ -224,7 +226,7 @@ public class CitasJpaController implements Serializable {
             em.close();
         }
     }
-    
+
     public List<Citas> findByIdCliente(int idCliente) {
         EntityManager em = getEntityManager();
         List<Citas> lista = new ArrayList<>();
@@ -236,5 +238,42 @@ public class CitasJpaController implements Serializable {
             return lista;
         }
     }
-    
+
+    public List<String> getHorasCitas(int dia, int mes, int anio) {
+        EntityManager em = getEntityManager();
+        List<Date> lista2 = new ArrayList<>();
+        List<Citas> lista = new ArrayList<>();
+        List<String> result = new ArrayList<>();
+
+//        TypedQuery<Citas> query = em.createQuery("SELECT c FROM Citas c WHERE c.dia=:dia AND c.mes=:mes AND c.anio=:anio", Citas.class);
+        TypedQuery<Citas> query = em.createQuery("SELECT c FROM Citas c WHERE c.dia = " + dia + " AND c.mes = " + mes + " AND c.anio = " + anio, Citas.class);
+        lista = query.getResultList();
+        if (lista.isEmpty()) {
+            return null;
+        } else {
+            for (Citas citas : lista) {
+                lista2.add(citas.getHora());
+            }
+            for (Date date : lista2) {
+                String horas = date.getHours() < 10 ? "0" + String.valueOf(date.getHours()) : String.valueOf(date.getHours());
+                result.add(horas + ":00");
+            }
+            return result;
+        }
+    }
+
+    public int getMaxId() {
+        int res = -1;
+        EntityManager em = getEntityManager();
+        List<Citas> lista = new ArrayList<>();
+        TypedQuery<Citas> query = em.createQuery("SELECT c FROM Citas c", Citas.class);
+        lista = query.getResultList();
+        if (lista.isEmpty()) {
+            return -1;
+        } else {
+            res = lista.get(lista.size() - 1).getIdCita();
+            return res;
+        }
+    }
+
 }

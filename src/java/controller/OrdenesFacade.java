@@ -25,10 +25,15 @@ public class OrdenesFacade {
 
     public List<OrdenBean> obtenerOrdenes(int idCliente) {
         List<OrdenBean> listaRet = new ArrayList<>();
-        for (Ordenes orden : ordenesJPA.findByIdCliente(idCliente)) {
-            listaRet.add(new OrdenBean(0, idCliente, orden.getTipo(), orden.getMarca(), orden.getPrecio(), orden.getEstado()));
+        List<Ordenes> listaOrdenes = ordenesJPA.findByIdCliente(idCliente);
+        if (listaOrdenes == null) {
+            return null;
+        } else {
+            for (Ordenes orden : listaOrdenes) {
+                listaRet.add(new OrdenBean(0, idCliente, orden.getTipo(), orden.getMarca(), orden.getPrecio(), orden.getEstado()));
+            }
+            return listaRet;
         }
-        return listaRet;
     }
 
 }

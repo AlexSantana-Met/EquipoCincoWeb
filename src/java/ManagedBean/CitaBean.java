@@ -8,13 +8,17 @@ package ManagedBean;
 import controller.CitasFacade;
 import javax.inject.Named;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.faces.model.SelectItem;
 import javax.servlet.http.HttpSession;
+import org.primefaces.event.SelectEvent;
 
 /**
  *
@@ -36,6 +40,7 @@ public class CitaBean implements Serializable {
     String estado;
     List<CitaBean> listaCitas;
     private String fecha;
+    private List<String> horasDisponibles;
 
     /**
      * Creates a new instance of CitaBean
@@ -54,6 +59,7 @@ public class CitaBean implements Serializable {
         this.descripcion = descripcion;
         this.estado = estado;
         this.respuesta = respuesta;
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "", null));
     }
 
     public int getIdCita() {
@@ -159,14 +165,14 @@ public class CitaBean implements Serializable {
         HttpSession session = (HttpSession) ec.getSession(false);
         int idCl = ((ClienteBean) session.getAttribute("cliente")).getIdCliente();
         listaCitas = new ArrayList<>();
-        listaCitas = cf.obtenerOrdenes(idCl);
-        for (CitaBean listaCita : listaCitas) {
-            listaCita.setFecha(formateaFecha(listaCita));
-        }
-        if (listaCitas.isEmpty()) {
-            fc.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "No existen registros de ordenes realizadas.", null));
-            return null;
+        listaCitas = cf.obtenerCitas(idCl);
+        if (listaCitas == null) {
+            fc.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "No existen registros de citas realizadas.", null));
+            return "Consultas.xhtml";
         } else {
+            for (CitaBean listaCita : listaCitas) {
+                listaCita.setFecha(formateaFecha(listaCita));
+            }
             fc.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "", null));
             return "Consultas.xhtml";
         }
@@ -174,7 +180,6 @@ public class CitaBean implements Serializable {
 
     private String formateaFecha(CitaBean cita) {
         String res = "";
-
         res = cita.getDia() < 10 ? res.concat("0" + String.valueOf(cita.getDia())) : res.concat(String.valueOf(cita.getDia()));
         switch (cita.getMes()) {
             case 1:
@@ -226,4 +231,114 @@ public class CitaBean implements Serializable {
         return res;
     }
 
+    public void fechaRes() {
+        if (date1 != null) {
+            System.out.println(date1.toString());
+        }
+        FacesContext fc = FacesContext.getCurrentInstance();
+        fc.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "", null));
+        CitasFacade cf = new CitasFacade();
+        if (date1 != null) {
+            fc.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "", null));
+            if (date1.compareTo(new java.util.Date()) <= 0) {
+                fc.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "", null));
+                fc.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Selecciona una fecha posterior a la actual.", null));
+            } else {
+                List<String> ocupadas = new ArrayList<>();
+                ocupadas = cf.obtenerHoras(date1);
+                mostrarDisponibles();
+                if (ocupadas != null && !ocupadas.isEmpty()) {
+                    for (String ocupada : ocupadas) {
+                        horasDisponibles.remove(ocupada);
+                    }
+                }
+            }
+        } else {
+            fc.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Selecciona una fecha por favor.", null));
+        }
+    }
+
+    private Date date1;
+//
+
+    public void onDateSelect(SelectEvent event) {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+    }
+
+    public Date getDate1() {
+        return date1;
+    }
+
+    public void setDate1(Date date1) {
+        this.date1 = date1;
+    }
+
+    public List<String> getHorasDisponibles() {
+        return horasDisponibles;
+    }
+
+    public void setHorasDisponibles(List<String> horasDisponibles) {
+        this.horasDisponibles = horasDisponibles;
+    }
+
+    public List<String> mostrarDisponibles() {
+        horasDisponibles = new ArrayList<>();
+        horasDisponibles.add("09:00");
+        horasDisponibles.add("10:00");
+        horasDisponibles.add("11:00");
+        horasDisponibles.add("12:00");
+        horasDisponibles.add("15:00");
+        horasDisponibles.add("16:00");
+        horasDisponibles.add("17:00");
+        horasDisponibles.add("18:00");
+        return horasDisponibles;
+    }
+
+    public List<SelectItem> getHorasDispCitas() {
+        List<SelectItem> listaReturn = new ArrayList<>();
+        if (horasDisponibles == null) {
+            listaReturn.add(new SelectItem("Selecciona una hora"));
+        } else {
+            listaReturn.add(new SelectItem("Selecciona una hora"));
+            for (String horasDisponible : horasDisponibles) {
+                listaReturn.add(new SelectItem(horasDisponible));
+            }
+        }
+        return listaReturn;
+    }
+
+    public void agendarCita() {
+        FacesContext fc = FacesContext.getCurrentInstance();
+        if (this.descripcion.isEmpty() || date1 == null || hora.isEmpty() || hora.equals("Selecciona una hora")) {
+            fc.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Por favor, ingrese todos lo campos que se solicitan.", null));
+        } else {
+            ExternalContext ex = fc.getExternalContext();
+            HttpSession session = (HttpSession) ex.getSession(false);
+            this.idCliente = ((ClienteBean) session.getAttribute("cliente")).getIdCliente();
+            CitasFacade cf = new CitasFacade();
+            String result = cf.registrarCita(this);
+            switch (result) {
+                case "EXITO":
+                    limpiar();
+                    fc.addMessage("", new FacesMessage(FacesMessage.SEVERITY_INFO, "Ha agendado la cita exitosamente.", null));
+                    break;
+                case "ERROR":
+                    fc.addMessage("", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ha ocurrido un error en su registro.", null));
+                    break;
+            }
+        }
+    }
+    
+    public void limpiar(){
+        this.anio = 0;
+        this.dia = 0;
+        this.mes = 0;
+        this.date1 = null;
+        this.descripcion = null;
+        this.fecha = null;
+        this.horasDisponibles = null;
+        this.respuesta = null;
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "", null));
+    }
 }

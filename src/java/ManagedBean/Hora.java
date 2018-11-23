@@ -16,18 +16,16 @@ import javax.enterprise.context.RequestScoped;
 @RequestScoped
 public class Hora {
 
-String Hora[]={"8:00","8:30","10:00","11:00","15:00","15:30","18:00"};
+    String Hora[] = {"09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00"};
 
     public String[] getHora() {
         return Hora;
     }
-
-
 
     /**
      * Creates a new instance of Hora
      */
     public Hora() {
     }
-    
+
 }

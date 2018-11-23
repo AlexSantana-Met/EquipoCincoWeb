@@ -154,14 +154,6 @@ public class ClienteBean implements Serializable {
             System.out.println("Campos vacíos");
             return null;
         } else {
-//            EntityManagerFactory emf = Persistence.createEntityManagerFactory("OpticaAndes-Persist");
-////            EntityManagerFactory emf = Persistence.createEntityManagerFactory("OpticaAndes-PrograWebPU");
-//            UserTransaction utx = null;
-//
-//            ClientesJpaController clientesJPA = new ClientesJpaController(utx, emf);
-//            int id = clientesJPA.getMaxId() + 1;
-//            LoginBean nuevoLoginBean = new LoginBean(correo, auxP);
-//            Login nuevoLogin = nuevoLoginBean.registroLogin();
             ClientesFacade cf = new ClientesFacade();
             String result = cf.nuevoCliente(this);
 
@@ -179,28 +171,6 @@ public class ClienteBean implements Serializable {
 
             }
             return null;
-
-//            if (nuevoLogin != null) {
-//                try {
-//                    c = new Clientes(id, nombre, apPaterno, apMaterno, nuevoLogin);
-//                    clientesJPA.create(c);
-//                    limpiar();
-//                    fc.addMessage("", new FacesMessage(FacesMessage.SEVERITY_INFO, "Se ha registrado exitosamente.", null));
-//                    return null;
-//                } catch (RollbackFailureException ex) {
-//                    System.out.println("Error en rollback, cliente " + ex);
-//                    fc.addMessage("", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ha ocurrido un error en su registro.", null));
-//                    return null;
-//                } catch (Exception ex) {
-//                    System.out.println("Error en general, cliente " + ex);
-//                    fc.addMessage("", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ha ocurrido un error en su registro.", null));
-//                    return null;
-//                }
-//            } else {
-//                System.out.println("Fuckin' Error cliente");
-//                fc.addMessage("", new FacesMessage(FacesMessage.SEVERITY_ERROR, "El correo que usted ingresó ya ha sido registrado anteriormente.", null));
-//                return null;
-//            }
         }
     }
 
@@ -219,7 +189,7 @@ public class ClienteBean implements Serializable {
 
     public void cerrarSesion() {
         HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
-        
+
         session.setAttribute("cliente", null);
         session.setAttribute("pass", null);
         session.setAttribute("correo", null);
@@ -227,7 +197,7 @@ public class ClienteBean implements Serializable {
         try {
             ec.redirect(ec.getRequestContextPath() + "/faces/index.xhtml");
         } catch (IOException ex) {
-            
+
         }
     }
 }
