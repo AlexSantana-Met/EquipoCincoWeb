@@ -200,4 +200,22 @@ public class ClienteBean implements Serializable {
 
         }
     }
+
+    public void EditarPerfil() {
+        FacesContext fc = FacesContext.getCurrentInstance();
+        HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
+        ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+        ClienteBean cliente = (ClienteBean) session.getAttribute("cliente");
+        cliente.setCorreo((String) session.getAttribute("user"));
+        ClientesFacade cf = new ClientesFacade();
+        String result = cf.editarClienteFacade(this);
+        switch (result) {
+            case "EXITO":
+                fc.addMessage("", new FacesMessage(FacesMessage.SEVERITY_INFO, "Se han guardado sus datos exitosamente.", null));
+                break;
+            case "ERROR":
+                fc.addMessage("", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al guardar.", null));
+                break;
+        }
+    }
 }

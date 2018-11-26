@@ -13,46 +13,32 @@
                     <h:panelGrid columns="2" cellpadding="1" cellspacing="1" class="panelSup" width="100%">
                         <h:panelGroup>
                             <h:form>
-                                <h:commandButton id="home" value="AGENDAR CITA" class="bton " action="index.xhtml"></h:commandButton>
-                                <h:commandButton id="ing" value="ORDENES" class="bton" action="Login.xhtml"></h:commandButton>
-                                <h:commandButton id="reg" value="CONSULTAS" class="bton" action="Consultas.xhtml"></h:commandButton>
-                                <h:commandButton id="prod" value="PERFIL" class="bton btnHover" ></h:commandButton>
-                                <h:commandButton value="Cerrar Sesión" action="#{clienteBean.cerrarSesion()}" class="btnLog" id="logout"/>
+                                <h:commandButton value="Regresar" action="#{clienteBean.muestraPerfil()}" class="btnLog" id="logout"/>
                             </h:form>
                         </h:panelGroup>
                     </h:panelGrid>
                 </div>
                 <div >
                     <div class="col-75">
-
                         <form >
-
-
-
                             <h3>informacion personal</h3>
-
-
                             <label for="nom"> Nombre:</label>
-                            <h:inputText class="campo" id="nom" disabled="false" value="Jonathan" > </h:inputText>
-
+                            <h:inputText class="campo" id="nom" disabled="false" value="#{clienteBean.nombre}" > </h:inputText>
                             <label for="fname"> Apellido Paterno:</label>
-                            <h:inputText class="campo" id="pat" disabled="false" value="Cuesta" > </h:inputText>
+                            <h:inputText class="campo" id="pat" disabled="false" value="#{clienteBean.apPaterno}" > </h:inputText>
                             <label for="fname"> Apellido Materno: </label>
-                            <h:inputText class="campo" id="mom" disabled="false" value="Sanchez" > </h:inputText>
+                            <h:inputText class="campo" id="mom" disabled="false" value="#{clienteBean.apMaterno}" > </h:inputText>
                             <div>
                                 <label for="mail"> Correo</label>
-                                <h:inputText class="mensaje" id="mail" disabled="false" value="Jonathancuesta@mail.com" > </h:inputText>
-
+                                <h:inputText class="mensaje" id="mail" disabled="true" value="#{clienteBean.correo}" > </h:inputText>
                                 <label for="adr">Dirección</label>
-                                <h:inputText class="mensaje" id="dir" disabled="false" value=""  > </h:inputText>
+                                <h:inputText class="mensaje" id="dir" disabled="false" value="#{clienteBean.direccion}"  > </h:inputText>
                                 <label for="city"> Ciudad</label>
-                                <h:inputText class="mensaje" id="city" disabled="false" value="Bogota" > </h:inputText>
+                                <h:inputText class="mensaje" id="city" disabled="false" value="#{clienteBean.ciudad}" > </h:inputText>
                                 <label for="adr"> Fecha de nacimiento</label>
-                                <h:inputText class="mensaje" id="born" disabled="false" value="13/12/1997" > </h:inputText>
+                                <h:inputText class="mensaje" id="born" disabled="false" value="#{clienteBean.fechaNac}" > </h:inputText>
                             </div>
-
-
-                            <h:commandButton class="enviar" value="Guardar Cmabios"></h:commandButton>
+                            <h:commandButton class="enviar" action="#{clienteBean.editarPerfil}" value="Guardar Cmabios"></h:commandButton>
                         </form>
 
                     </div>

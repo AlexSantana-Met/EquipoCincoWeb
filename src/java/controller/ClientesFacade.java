@@ -48,9 +48,25 @@ public class ClientesFacade {
             return "CORREO";
         }
     }
-    
-    public ClienteBean getCliente(String correo){
+
+    public ClienteBean getCliente(String correo) {
         Clientes cl = clientesJPA.findClienteByCorreo(correo);
         return new ClienteBean(cl.getIdCliente(), cl.getNombre(), cl.getApPaterno(), cl.getApMaterno(), cl.getFechaNac(), cl.getDireccion(), cl.getCiudad());
+    }
+
+    public String editarClienteFacade(ClienteBean cliente) {
+        String correo = cliente.getCorreo();
+        Clientes cl = clientesJPA.findClienteByCorreo(correo);
+        // ClienteBean c= new ClienteBean(cl.getIdCliente(), cl.getNombre(), cl.getApPaterno(), cl.getApMaterno(), cl.getFechaNac(), cl.getDireccion(), cl.getCiudad());
+        try {
+            clientesJPA.edit(cl);
+            return "EXITO";
+        } catch (RollbackFailureException ex) {
+            System.out.println("Error en rollback, cliente " + ex);
+            return "ERROR";
+        } catch (Exception ex) {
+            return "ERROR";
+        }
+
     }
 }
