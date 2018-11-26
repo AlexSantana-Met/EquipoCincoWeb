@@ -12,6 +12,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.ExternalContext;
@@ -41,11 +42,13 @@ public class CitaBean implements Serializable {
     List<CitaBean> listaCitas;
     private String fecha;
     private List<String> horasDisponibles;
+    private List<SelectItem> listaReturn;
 
     /**
      * Creates a new instance of CitaBean
      */
     public CitaBean() {
+        this.listaReturn = new ArrayList<>();
     }
 
     public CitaBean(int idCita, int anio, int dia, int mes, int idCliente, int idEmpleado, String hora, String descripcion, String estado, String respuesta) {
@@ -60,6 +63,7 @@ public class CitaBean implements Serializable {
         this.estado = estado;
         this.respuesta = respuesta;
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "", null));
+        this.listaReturn = new ArrayList<>();
     }
 
     public int getIdCita() {
@@ -111,7 +115,7 @@ public class CitaBean implements Serializable {
     }
 
     public String getHora() {
-        return hora;
+        return (String) hora;
     }
 
     public void setHora(String hora) {
@@ -296,16 +300,24 @@ public class CitaBean implements Serializable {
     }
 
     public List<SelectItem> getHorasDispCitas() {
-        List<SelectItem> listaReturn = new ArrayList<>();
+        listaReturn.clear();
+        SelectItem first = new SelectItem("", "Selecciona una opción", "", false, true, true);
         if (horasDisponibles == null) {
-            listaReturn.add(new SelectItem("Selecciona una hora"));
+            listaReturn.add(first);
         } else {
-            listaReturn.add(new SelectItem("Selecciona una hora"));
+            listaReturn.add(first);
+//            for (int i = 0; i < horasDisponibles.size(); i++) {
+//                listaReturn.add(new SelectItem(i + 1, horasDisponibles.get(i).toString()));
+//            }
             for (String horasDisponible : horasDisponibles) {
-                listaReturn.add(new SelectItem(horasDisponible));
+                listaReturn.add(new SelectItem((String) horasDisponible, horasDisponible));
             }
         }
         return listaReturn;
+    }
+
+    public List<String> getHrsDip() {
+        return horasDisponibles;
     }
 
     public void agendarCita() {
@@ -329,16 +341,34 @@ public class CitaBean implements Serializable {
             }
         }
     }
-    
-    public void limpiar(){
+
+    public void limpiar() {
         this.anio = 0;
         this.dia = 0;
         this.mes = 0;
         this.date1 = null;
-        this.descripcion = null;
+        this.descripcion = "";
         this.fecha = null;
         this.horasDisponibles = null;
         this.respuesta = null;
+        this.hora = "";
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "", null));
     }
+
+    public List<SelectItem> getListaReturn() {
+        return listaReturn;
+    }
+
+    public void setListaReturn(List<SelectItem> listaReturn) {
+        this.listaReturn = listaReturn;
+    }
+
+    public void checa() {
+        if (hora.isEmpty()) {
+            System.out.println("Nada");
+        } else {
+            System.out.println("Algo" + hora.toString());
+        }
+    }
+
 }

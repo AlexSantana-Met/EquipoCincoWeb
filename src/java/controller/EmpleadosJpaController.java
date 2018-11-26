@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import javax.transaction.UserTransaction;
 
 /**
@@ -30,7 +31,7 @@ public class EmpleadosJpaController implements Serializable {
 
     public EmpleadosJpaController(UserTransaction utx, EntityManagerFactory emf) {
         this.utx = utx;
-        this.emf = emf;
+        this.emf = Persistence.createEntityManagerFactory("OpticaAndes-Persist");
     }
     private UserTransaction utx = null;
     private EntityManagerFactory emf = null;
@@ -43,10 +44,11 @@ public class EmpleadosJpaController implements Serializable {
         if (empleados.getCitasList() == null) {
             empleados.setCitasList(new ArrayList<Citas>());
         }
-        EntityManager em = null;
+        EntityManager em = getEntityManager();
         try {
-            utx.begin();
-            em = getEntityManager();
+//            utx.begin();
+            em.getTransaction().begin();
+//            em = getEntityManager();
             List<Citas> attachedCitasList = new ArrayList<Citas>();
             for (Citas citasListCitasToAttach : empleados.getCitasList()) {
                 citasListCitasToAttach = em.getReference(citasListCitasToAttach.getClass(), citasListCitasToAttach.getIdCita());
@@ -63,10 +65,12 @@ public class EmpleadosJpaController implements Serializable {
                     oldEmpleadosIdOfCitasListCitas = em.merge(oldEmpleadosIdOfCitasListCitas);
                 }
             }
-            utx.commit();
+//            utx.commit();
+            em.getTransaction().commit();
         } catch (Exception ex) {
             try {
-                utx.rollback();
+//                utx.rollback();
+                em.getTransaction().rollback();
             } catch (Exception re) {
                 throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
             }
@@ -82,10 +86,11 @@ public class EmpleadosJpaController implements Serializable {
     }
 
     public void edit(Empleados empleados) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
-        EntityManager em = null;
+        EntityManager em = getEntityManager();
         try {
-            utx.begin();
-            em = getEntityManager();
+//            utx.begin();
+//            em = getEntityManager();
+            em.getTransaction().begin();
             Empleados persistentEmpleados = em.find(Empleados.class, empleados.getIdEmpleado());
             List<Citas> citasListOld = persistentEmpleados.getCitasList();
             List<Citas> citasListNew = empleados.getCitasList();
@@ -120,10 +125,12 @@ public class EmpleadosJpaController implements Serializable {
                     }
                 }
             }
-            utx.commit();
+//            utx.commit();
+            em.getTransaction().commit();
         } catch (Exception ex) {
             try {
-                utx.rollback();
+//                utx.rollback();
+                em.getTransaction().rollback();
             } catch (Exception re) {
                 throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
             }
@@ -143,10 +150,11 @@ public class EmpleadosJpaController implements Serializable {
     }
 
     public void destroy(Integer id) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
-        EntityManager em = null;
+        EntityManager em = getEntityManager();
         try {
-            utx.begin();
-            em = getEntityManager();
+//            utx.begin();
+//            em = getEntityManager();
+            em.getTransaction().begin();
             Empleados empleados;
             try {
                 empleados = em.getReference(Empleados.class, id);
@@ -166,10 +174,12 @@ public class EmpleadosJpaController implements Serializable {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
             em.remove(empleados);
-            utx.commit();
+//            utx.commit();
+            em.getTransaction().commit();
         } catch (Exception ex) {
             try {
-                utx.rollback();
+//                utx.rollback();
+                em.getTransaction().rollback();
             } catch (Exception re) {
                 throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
             }
@@ -226,5 +236,5 @@ public class EmpleadosJpaController implements Serializable {
             em.close();
         }
     }
-    
+
 }

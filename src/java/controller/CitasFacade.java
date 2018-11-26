@@ -53,14 +53,24 @@ public class CitasFacade {
     }
 
     public String registrarCita(CitaBean cita) {
-        int idCita = citasJPA.getMaxId();
-        Clientes clientes = new Clientes(cita.getIdCliente());
-        Empleados empleados = new Empleados((int)(Math.random() * 3));
-        Citas citas = new Citas(idCita, cita.getDia(), cita.getMes(), cita.getAnio(), 
-                new java.util.Date(), cita.getDescripcion(), "En proceso", clientes, empleados);
+        int idCita = citasJPA.getMaxId() + 1;
+//        Clientes clientes = new Clientes(cita.getIdCliente());
+//        Empleados empleados = new Empleados((int) (Math.random() * ((3 - 1) + 1) + 1));
+        Clientes clientes = new ClientesJpaController(utx, emf).findClientes(cita.getIdCliente());
+        Empleados empleados = new EmpleadosJpaController(utx, emf).findEmpleados((int) (Math.random() * ((3 - 1) + 1) + 1));
+        Date hora = new java.util.Date();
+        hora.setHours(Integer.parseInt(cita.getHora().split(":")[0]));
+        hora.setMinutes(0);
+        hora.setSeconds(0);
+        hora.setDate(0);
+        hora.setMonth(0);
+        hora.setYear(0);
+
+        Citas citas = new Citas(idCita, cita.getDate1().getDate(), cita.getDate1().getMonth() + 1, cita.getDate1().getYear() + 1900,
+                hora, cita.getDescripcion(), "En proceso", clientes, empleados);
         try {
             citasJPA.create(citas);
-            return "Exito";
+            return "EXITO";
         } catch (RollbackFailureException ex) {
             return "ERROR";
         } catch (Exception ex) {
