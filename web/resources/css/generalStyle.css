@@ -275,16 +275,26 @@ par, impar{
 }
 
 #tablaCon,
-#tableEmpleado {
+#tableEmpleado,
+#tablaCli {
     width: 80%;
 }
 
 #tableEmpleado table thead tr th,
 #tableEmpleado table tr td,
 #tablaCon table thead tr th,
-#tablaCon table tr td {
+#tablaCon table tr td,
+#tablaCli table thead tr th,
+#tablaCli table tr td {
     border: 1px rgba(0,0,0,.2) solid;
     padding: 10px 15px;
+}
+
+#tablaCli table {
+    border-collapse: collapse;  
+    width: 80%; 
+    /*margin: 0 auto 5rem;*/
+    border: 1px rgba(0,0,0,.2) solid;
 }
 
 #tablaCon table {
@@ -294,14 +304,28 @@ par, impar{
     border: 1px rgba(0,0,0,.2) solid;
 }
 
+#tablaCli th, #tablaCon td { 
+    padding: 7px;
+    /*height: 20px;*/
+    /*padding: 1.5rem;*/
+    font-size: 12px; 
+    transition: .4s ease-in; 
+}
+
 #tablaCon th, #tablaCon td { 
     padding: 7px;
     /*height: 20px;*/
     /*padding: 1.5rem;*/
     font-size: 12px; 
-    transition: .4s ease-in; }
+    transition: .4s ease-in; 
+}
 
 #tablaCon tr {
+    /*background: hsla(54, 66%, 87%,.7);*/
+    background-color: rgba(226,239,217,.9);
+}
+
+#tablaCli tr {
     /*background: hsla(54, 66%, 87%,.7);*/
     background-color: rgba(226,239,217,.9);
 }
@@ -315,6 +339,23 @@ par, impar{
     height: 30px;
     color: #FFF;
 }
+
+#tablaCli th{
+    /*background: hsl(101, 34%, 44%);*/
+    text-align:center;
+    background:none repeat scroll 0 0 rgba(112,173,71,.9);
+    border-bottom:1px solid #000;  
+    padding:2px;
+    height: 30px;
+    color: #FFF;
+}
+
+#tablaCli tr:nth-child(even) { 
+    background-color: rgba(255,255,255,.9);
+    /*    background: rgba(0,0,0,.1); */
+}
+#tablaCli tr:hover:not(#firstrow), tr:hover td:empty {background: rgba(112,173,71, 0.6); pointer-events: visible;}
+#tablaCli tr:hover:not(#firstrow) { transform: scale(1.1); box-shadow: 0px 3px 7px rgba(112,173,71, 0.5);}
 
 #tablaCon tr:nth-child(even) { 
     background-color: rgba(255,255,255,.9);

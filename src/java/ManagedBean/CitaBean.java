@@ -322,7 +322,7 @@ public class CitaBean implements Serializable {
 
     public void agendarCita() {
         FacesContext fc = FacesContext.getCurrentInstance();
-        if (this.descripcion.isEmpty() || date1 == null || hora.isEmpty() || hora.equals("Selecciona una hora")) {
+        if (this.descripcion.isEmpty() || date1 == null || hora.isEmpty()) {
             fc.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Por favor, ingrese todos lo campos que se solicitan.", null));
         } else {
             ExternalContext ex = fc.getExternalContext();
@@ -352,7 +352,7 @@ public class CitaBean implements Serializable {
         this.horasDisponibles = null;
         this.respuesta = null;
         this.hora = "";
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "", null));
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "", null));
     }
 
     public List<SelectItem> getListaReturn() {

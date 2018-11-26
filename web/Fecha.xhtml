@@ -13,6 +13,16 @@
     <h:body>
         <ui:composition template="plantillas/main.xhtml">
             <ui:define name="content">
+                <script>
+                    $(document).ready(function () {
+                        $("#tablaCli tbody tr").click(function () {
+                            var valor = $(this).find("td").eq(0).html();
+                            console.log(valor);
+                            $("#valHora").val(valor);
+                            document.getElementById("valHora").value = valor;
+                        });
+                    });
+                </script>
                 <div id="menu" align="center">
                     <h:panelGrid columns="2" cellpadding="1" cellspacing="1" class="panelSup" width="100%">
                         <h:panelGroup>
@@ -32,7 +42,7 @@
                     <h:form prependId="false">
                         <h:panelGrid columns="3" cellpadding="1" cellspacing="20" width="70%">
                             <p:outputLabel for="popup" value="Seleccione la fecha a asignar su cita:" />
-                            <p:outputLabel for="tablaCon" value="Seleccione la hora a asignar su cita:" />
+                            <p:outputLabel for="tablaCli" value="Seleccione la hora a asignar su cita:" />
                             <p:outputLabel for="desc" value="Descripción: " />
                             <h:panelGroup>
                                 <p:calendar id="popup" value="#{citaBean.date1}"/>
@@ -44,15 +54,12 @@
                                 </h:commandButton>
                             </h:panelGroup>
                             <h:panelGroup>
-                                <h:dataTable value="#{citaBean.hrsDip}" var="hrs" id="tablaCon">
+                                <h:dataTable value="#{citaBean.hrsDip}" var="hrs" id="tablaCli">
                                     <f:facet name="caption">Horas Disponibles</f:facet>
-                                    <h:column >
-                                        <f:facet name="header">Hora</f:facet>
-                                            #{hrs}
-                                    </h:column> 
+                                    <h:column><f:facet name="header">Hora</f:facet>#{hrs}</h:column> 
                                 </h:dataTable>
                                 <h:outputLabel>
-                                    <strong>Ingresa la hora: </strong>
+                                    <strong>Selecciona la hora: </strong>
                                     <h:inputText id="valHora" value="#{citaBean.hora}"/>
                                 </h:outputLabel>
                             </h:panelGroup>

@@ -12,15 +12,13 @@
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Alejandro/Desktop/Respaldo/Respaldo/EquipoCincoWeb/src/java/controller/ClientesFacade.java</file>
+            <file>file:/C:/Users/Alejandro/Desktop/Respaldo/Respaldo/EquipoCincoWeb/src/java/controller/EmpleadosJpaController.java</file>
             <file>file:/C:/Users/Alejandro/Desktop/Respaldo/Respaldo/EquipoCincoWeb/web/Fecha.xhtml</file>
-            <file>file:/C:/Users/Alejandro/Desktop/Respaldo/Respaldo/EquipoCincoWeb/src/java/ManagedBean/ClienteBean.java</file>
+            <file>file:/C:/Users/Alejandro/Desktop/Respaldo/Respaldo/EquipoCincoWeb/web/Registro.xhtml</file>
             <file>file:/C:/Users/Alejandro/Desktop/Respaldo/Respaldo/EquipoCincoWeb/src/java/controller/CitasFacade.java</file>
-            <file>file:/C:/Users/Alejandro/Desktop/Respaldo/Respaldo/EquipoCincoWeb/src/java/controller/CitasJpaController.java</file>
             <file>file:/C:/Users/Alejandro/Desktop/Respaldo/Respaldo/EquipoCincoWeb/src/java/ManagedBean/CitaBean.java</file>
-            <file>file:/C:/Users/Alejandro/Desktop/Respaldo/Respaldo/EquipoCincoWeb/src/java/controller/ClientesJpaController.java</file>
-            <file>file:/C:/Users/Alejandro/Desktop/Respaldo/Respaldo/EquipoCincoWeb/src/java/entity/Citas.java</file>
-            <file>file:/C:/Users/Alejandro/Desktop/Respaldo/Respaldo/EquipoCincoWeb/web/Contactar.xhtml</file>
+            <file>file:/C:/Users/Alejandro/Desktop/Respaldo/Respaldo/EquipoCincoWeb/web/plantillas/main.xhtml</file>
+            <file>file:/C:/Users/Alejandro/Desktop/Respaldo/Respaldo/EquipoCincoWeb/src/java/ManagedBean/CalendarView.java</file>
         </group>
     </open-files>
 </project-private>
