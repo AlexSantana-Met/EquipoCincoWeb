@@ -10,6 +10,7 @@ import ManagedBean.LoginBean;
 import ManagedBean.exceptions.RollbackFailureException;
 import entity.Clientes;
 import entity.Login;
+import java.util.Date;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.transaction.UserTransaction;
@@ -51,21 +52,32 @@ public class ClientesFacade {
 
     public ClienteBean getCliente(String correo) {
         Clientes cl = clientesJPA.findClienteByCorreo(correo);
-        return new ClienteBean(cl.getIdCliente(), cl.getNombre(), cl.getApPaterno(), cl.getApMaterno(), cl.getFechaNac(), cl.getDireccion(), cl.getCiudad());
+        String fechaNac = "";
+        if (cl.getFechaNac() != null) {
+            fechaNac = String.valueOf(cl.getFechaNac().getDate()) + "/" + String.valueOf(cl.getFechaNac().getMonth() + 1) + "/" + String.valueOf(cl.getFechaNac().getYear() + 1900);
+        }
+        return new ClienteBean(cl.getIdCliente(), cl.getNombre(), cl.getApPaterno(), cl.getApMaterno(), fechaNac, cl.getDireccion(), cl.getCiudad());
     }
 
-    public String editarClienteFacade(ClienteBean cliente) {
+    public ClienteBean editarClienteFacade(ClienteBean cliente) {
         String correo = cliente.getCorreo();
         Clientes cl = clientesJPA.findClienteByCorreo(correo);
-        // ClienteBean c= new ClienteBean(cl.getIdCliente(), cl.getNombre(), cl.getApPaterno(), cl.getApMaterno(), cl.getFechaNac(), cl.getDireccion(), cl.getCiudad());
+        cl.setCiudad(cliente.getCiudad());
+        cl.setDireccion(cliente.getDireccion());
+        Date fechaN = new Date();
+        fechaN.setMonth(Integer.parseInt(cliente.getFechaNac().split("/")[1]) - 1);
+        fechaN.setDate(Integer.parseInt(cliente.getFechaNac().split("/")[0]));
+        fechaN.setYear(Integer.parseInt(cliente.getFechaNac().split("/")[2]) - 1900);
+        cl.setFechaNac(fechaN);
         try {
             clientesJPA.edit(cl);
-            return "EXITO";
+            String fechaNac = String.valueOf(cl.getFechaNac().getDate()) + "/" + String.valueOf(cl.getFechaNac().getMonth() + 1) + "/" + String.valueOf(cl.getFechaNac().getYear() + 1900);
+            return new ClienteBean(cliente.getIdCliente(), cl.getNombre(), cl.getApPaterno(), cl.getApMaterno(), fechaNac, cl.getDireccion(), cl.getCiudad());
         } catch (RollbackFailureException ex) {
             System.out.println("Error en rollback, cliente " + ex);
-            return "ERROR";
+            return null;
         } catch (Exception ex) {
-            return "ERROR";
+            return null;//dd/mm/yyyy
         }
 
     }

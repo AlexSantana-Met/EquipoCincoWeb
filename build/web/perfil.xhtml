@@ -29,7 +29,6 @@
                         <h:form >
                             <h3>informacion personal</h3>
 
-
                             <label for="nom"> Nombre:</label>
                             <h:inputText class="campo" id="nom" disabled="true" value="#{clienteBean.nombre}" > </h:inputText>
 
@@ -48,14 +47,13 @@
                                 <label for="adr"> Fecha de nacimiento</label>
                                 <h:inputText class="mensaje" id="born" disabled="true" value="#{clienteBean.fechaNac}" > </h:inputText>
                             </div>
-
-
-                            <h:commandButton class="editarbtn" value="Editar" action="Editar_Perfil.xhtml"></h:commandButton>
+                            <div align="center">
+                                <h:commandButton class="enviar" value="Editar" action="#{clienteBean.muestraPerfilEditar()}"></h:commandButton>
+                            </div>
                         </h:form>
                         <h:messages infoClass="info" errorClass="error" warnClass="warning" fatalClass="normalM" id="mj"/>
 
                     </div>
-
 
                 </div>
 

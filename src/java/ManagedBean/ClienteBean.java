@@ -30,7 +30,7 @@ public class ClienteBean implements Serializable {
     private String apPaterno;
     private String apMaterno;
     private String correo;
-    private Date fechaNac;
+    private String fechaNac;
     private String direccion;
     private String ciudad;
     private String auxP;
@@ -49,6 +49,7 @@ public class ClienteBean implements Serializable {
             this.ciudad = cl.getCiudad();
             this.direccion = cl.getDireccion();
             this.fechaNac = cl.getFechaNac();
+            this.correo = (String) session.getAttribute("user");
         } else {
 
         }
@@ -94,11 +95,11 @@ public class ClienteBean implements Serializable {
         this.correo = correo;
     }
 
-    public Date getFechaNac() {
+    public String getFechaNac() {
         return fechaNac;
     }
 
-    public void setFechaNac(Date fechaNac) {
+    public void setFechaNac(String fechaNac) {
         this.fechaNac = fechaNac;
     }
 
@@ -126,7 +127,7 @@ public class ClienteBean implements Serializable {
         this.auxP = auxP;
     }
 
-    public ClienteBean(int id, String nombre, String apPaterno, String apMaterno, Date fechaNac, String direccion, String ciudad) {
+    public ClienteBean(int id, String nombre, String apPaterno, String apMaterno, String fechaNac, String direccion, String ciudad) {
         this.idCliente = id;
         this.nombre = nombre;
         this.apPaterno = apPaterno;
@@ -201,21 +202,40 @@ public class ClienteBean implements Serializable {
         }
     }
 
-    public void EditarPerfil() {
+    public String editarPerfil() {
         FacesContext fc = FacesContext.getCurrentInstance();
         HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
         ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
         ClienteBean cliente = (ClienteBean) session.getAttribute("cliente");
         cliente.setCorreo((String) session.getAttribute("user"));
         ClientesFacade cf = new ClientesFacade();
-        String result = cf.editarClienteFacade(this);
-        switch (result) {
-            case "EXITO":
-                fc.addMessage("", new FacesMessage(FacesMessage.SEVERITY_INFO, "Se han guardado sus datos exitosamente.", null));
-                break;
-            case "ERROR":
-                fc.addMessage("", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al guardar.", null));
-                break;
+        ClienteBean aux = cf.editarClienteFacade(this);
+        if (aux != null) {
+            session.setAttribute("cliente", aux);
+            fc.addMessage("", new FacesMessage(FacesMessage.SEVERITY_INFO, "Se han guardado sus datos exitosamente.", null));
+        } else {
+            fc.addMessage("", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al guardar.", null));
+        }
+//        switch (result) {
+//            case "EXITO":
+//
+//                break;
+//            case "ERROR":
+//
+//                break;
+//        }
+        return null;
+    }
+
+    public String muestraPerfilEditar() {
+        ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+        try {
+            HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
+            ClienteBean cl = (ClienteBean) session.getAttribute("cliente");
+            ec.redirect(ec.getRequestContextPath() + "/faces/Editar_perfil.xhtml");
+            return "EXITO";
+        } catch (IOException ex) {
+            return "ERROR";
         }
     }
 }
